@@ -79,8 +79,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\windows\Desktop\png-transparent-dollar-logo-currency-exchange-rate-currency-symbol-money-currency-converter-bureau-de-change-united-states-dollar.png" />
-                                                <entry key="scalingPercent" value="65" />
+                                                <entry key="imagePath" value="C:\Users\windows\Downloads\kisspng-currency-symbol-exchange-rate-money-clip-art-currency-dollar-euro-exchange-rate-free-image-5.svg" />
+                                                <entry key="scalingPercent" value="55" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -282,6 +282,29 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                      </PersistentState>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState>
+              <option name="children">
+                <map>
+                  <entry key="vectorAssetStep">
+                    <value>
+                      <PersistentState>
+                        <option name="values">
+                          <map>
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_launcher" />
+                            <entry key="sourceFile" value="C:\Users\windows\Downloads\kisspng-currency-symbol-exchange-rate-money-clip-art-currency-dollar-euro-exchange-rate-free-image-5.svg" />
                           </map>
                         </option>
                       </PersistentState>

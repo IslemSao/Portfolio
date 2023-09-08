@@ -28,8 +28,8 @@
         "source": "com.example.CurrencyConvertor.app-main-28:/drawable/flag_gpb.png"
     },
     {
-        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-xxhdpi/ic_launcher_foreground.png"
+        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/drawable_ic_launcher.xml.flat",
+        "source": "com.example.CurrencyConvertor.app-main-28:/drawable/ic_launcher.xml"
     },
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xxhdpi_ic_icon_foreground.png.flat",
@@ -52,20 +52,12 @@
         "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-hdpi/aya_round.png"
     },
     {
-        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-hdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-hdpi/ic_launcher_foreground.png"
-    },
-    {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xxhdpi_aya_round.png.flat",
         "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-xxhdpi/aya_round.png"
     },
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xxxhdpi_ic_icon_foreground.png.flat",
         "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-xxxhdpi/ic_icon_foreground.png"
-    },
-    {
-        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
-        "source": "com.example.CurrencyConvertor.app-pngs-21:/drawable-anydpi-v24/ic_launcher_foreground.xml"
     },
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-hdpi_ic_icon_round.png.flat",
@@ -100,6 +92,10 @@
         "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-xxhdpi/ic_launcher_round.png"
     },
     {
+        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.example.CurrencyConvertor.app-main-28:/drawable/ic_launcher_foreground.xml"
+    },
+    {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/drawable_baseline_currency_exchange_24.xml.flat",
         "source": "com.example.CurrencyConvertor.app-main-28:/drawable/baseline_currency_exchange_24.xml"
     },
@@ -114,10 +110,6 @@
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/xml_backup_rules.xml.flat",
         "source": "com.example.CurrencyConvertor.app-main-28:/xml/backup_rules.xml"
-    },
-    {
-        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-mdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-mdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xxxhdpi_aya_round.png.flat",
@@ -162,10 +154,6 @@
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-anydpi-v26_aya.xml.flat",
         "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-anydpi-v26/aya.xml"
-    },
-    {
-        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-xhdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-mdpi_ic_icon_foreground.png.flat",
@@ -266,10 +254,6 @@
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-hdpi_ic_icon_foreground.png.flat",
         "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-hdpi/ic_icon_foreground.png"
-    },
-    {
-        "merged": "com.example.CurrencyConvertor.app-merged_res-26:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
-        "source": "com.example.CurrencyConvertor.app-main-28:/mipmap-xxxhdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "com.example.CurrencyConvertor.app-merged_res-26:/layout_activity_main.xml.flat",

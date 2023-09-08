@@ -20,6 +20,7 @@ drawable flag_gpb
 drawable flag_sar
 drawable flag_usa
 drawable ic_icon_background
+drawable ic_launcher
 drawable ic_launcher_background
 drawable ic_launcher_foreground
 drawable logo
@@ -58,7 +59,6 @@ mipmap ic_icon
 mipmap ic_icon_foreground
 mipmap ic_icon_round
 mipmap ic_launcher
-mipmap ic_launcher_foreground
 mipmap ic_launcher_round
 string app_name
 style RoundedCornersOverlay

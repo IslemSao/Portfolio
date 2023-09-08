@@ -17,7 +17,7 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/black</item>
         
     </style>
     <style name="Theme.Material3.DayNight" parent="Theme.Material3.Dark"/>
