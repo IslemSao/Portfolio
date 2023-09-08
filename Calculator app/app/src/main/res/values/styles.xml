@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="circularShape" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="RoundedEditText">
+        <item name="shapeAppearanceOverlay">@style/RoundedCornersOverlay</item>
+    </style>
+
+    <style name="RoundedCornersOverlay">
+        <item name="cornerSize">26dp</item> <!-- Adjust the value as needed -->
+    </style>
+
+
+
+
+</resources>
