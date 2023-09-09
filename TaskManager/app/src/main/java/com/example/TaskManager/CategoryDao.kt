@@ -20,7 +20,7 @@ interface CategoryDao {
 
     @Query("SELECT id FROM Category WHERE name = :categoryName")
     fun getCategoryIdByName(categoryName: String): Int?
+
     @Query("SELECT color FROM Category WHERE id = :categoryId")
     fun getCategoryColorById(categoryId: Int): Int
-    // Add other methods
 }

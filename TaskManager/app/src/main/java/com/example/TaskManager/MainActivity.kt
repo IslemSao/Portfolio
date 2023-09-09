@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -24,19 +23,14 @@ import android.widget.PopupWindow
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Constraints
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.WorkManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -50,10 +44,7 @@ class MainActivity : AppCompatActivity() {
     val REQUEST_CODE_ADD_CATEGORY = 1 // Define a request code
     private lateinit var spinnerCategory: Spinner // Declare it here
     var categoryNamesList: List<String> = listOf()
-    private lateinit var categoriesAdapter: CategoriesAdapter
-    lateinit var categoryDao: CategoryDao
     private lateinit var taskAdapter: ImportantTasksAdapter
-    lateinit var taskDao :TaskDao
 
     override fun onResume() {
         super.onResume()
@@ -185,11 +176,9 @@ class MainActivity : AppCompatActivity() {
         spinnerImportance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 selectedImportance = importanceLetters[position]
-                // Use the selectedImportance as needed
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do something when nothing is selected
             }
         }
         spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -199,14 +188,11 @@ class MainActivity : AppCompatActivity() {
                 lifecycle.apply {
                     CoroutineScope(Dispatchers.IO).launch {
                         category = MyApplication.database.categoryDao().getCategoryIdByName(catName)!!
-
                     }
                 }
-                // Use the selectedImportance as needed
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do something when nothing is selected
             }
         }
         val btnNTConfirm: Button = popupView.findViewById(R.id.btnNTconfirm)
@@ -244,7 +230,6 @@ class MainActivity : AppCompatActivity() {
                         val filteredTasks = MyApplication.database.taskDao().getAllTasks()
                         val uncompletedTasks = filteredTasks.sortedByDescending { it.calculateImportance() }.filter { it.done == false }
                         text = uncompletedTasks[0].toDo.toString()
-                        println(text)
                         withContext(Dispatchers.Main) {
                             val serviceIntent = Intent(this@MainActivity, YourForegroundService::class.java)
                             serviceIntent.putExtra("notificationText", text)

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.saotest'
+    namespace 'com.example.Calculator'
     compileSdk 32
 
     defaultConfig {

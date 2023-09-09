@@ -30,7 +30,7 @@ data class Task(
 
         val importanceValue = importanceValues[importance]
         if (importanceValue == null || daysLeft == 0.0) {
-            return importanceValue!!.toDouble() // Return a default value or handle the case based on your app's logic
+            return importanceValue!!.toDouble()
         }
         if (daysLeft < 0) {
             return -1.0

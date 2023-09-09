@@ -32,12 +32,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-class category1 : AppCompatActivity()  , CategoryDeleteListener{
+class category1 : AppCompatActivity(), CategoryDeleteListener {
     private lateinit var newTaskPopup: PopupWindow
     private lateinit var taskAdapter: TasksAdapter
-    lateinit var categoryDao :CategoryDao
-    lateinit var taskDao :TaskDao
-
+    lateinit var categoryDao: CategoryDao
+    lateinit var taskDao: TaskDao
 
 
     @SuppressLint("MissingInflatedId")
@@ -50,20 +49,22 @@ class category1 : AppCompatActivity()  , CategoryDeleteListener{
         val name = intent.getStringExtra("NAME")
         val background = intent.getIntExtra("BACKGROUND", 0)
         val color = intent.getIntExtra("COLOR", 0)
-        val id = intent.getIntExtra("ID" , 0)
+        val id = intent.getIntExtra("ID", 0)
         val categoryNameTextView: TextView = findViewById(R.id.tvCategory1)
         var selectedImportance = 'A'
-        var newName : String
+        var newName: String
         val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
-        var selectedDate =LocalDate.now().format(formatter)
+        var selectedDate = LocalDate.now().format(formatter)
         var text = "test"
         GlobalScope.launch {
             categoryDao = MyApplication.database.categoryDao()
-             taskDao = MyApplication.database.taskDao()
-            val category = categoryDao.getAllCategories().find { it.name == name && it.color == background }
-            var filteredTasks = taskDao.getTasksForCategory(category!!.id).sortedByDescending { it.calculateImportance() }
+            taskDao = MyApplication.database.taskDao()
+            val category =
+                categoryDao.getAllCategories().find { it.name == name && it.color == background }
+            var filteredTasks = taskDao.getTasksForCategory(category!!.id)
+                .sortedByDescending { it.calculateImportance() }
 
-            taskAdapter = TasksAdapter( filteredTasks , this@category1)
+            taskAdapter = TasksAdapter(filteredTasks, this@category1)
             rvTasks.adapter = taskAdapter
 
         }
@@ -87,7 +88,8 @@ class category1 : AppCompatActivity()  , CategoryDeleteListener{
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
             true
         )
-        val addTaskInCategoryBlock = popupView.findViewById<ConstraintLayout>(R.id.clNewTaskInCategory)
+        val addTaskInCategoryBlock =
+            popupView.findViewById<ConstraintLayout>(R.id.clNewTaskInCategory)
         // Set click listener for the "Add Category" button
         btnAddTask.setOnClickListener {
             val fadeInAnimation = AnimationUtils.loadAnimation(this@category1, R.anim.fade_in)
@@ -104,10 +106,8 @@ class category1 : AppCompatActivity()  , CategoryDeleteListener{
 
 // Create an array of importance letters
         val importanceLetters = listOf('A', 'B', 'C', 'D')
-        val spinnerAdapter = ImportanceSpinnerAdapter(this,importanceLetters)
+        val spinnerAdapter = ImportanceSpinnerAdapter(this, importanceLetters)
         spinnerImportance.adapter = spinnerAdapter
-
-
 
 
         val editTextDate: EditText = popupView.findViewById(R.id.etNTCdeadline)
@@ -126,7 +126,12 @@ class category1 : AppCompatActivity()  , CategoryDeleteListener{
             datePickerDialog.show()
         }
         spinnerImportance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 selectedImportance = importanceLetters[position]
                 // Use the selectedImportance as needed
             }

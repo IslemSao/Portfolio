@@ -6,7 +6,6 @@ import androidx.room.Room
 // MyApplication.kt
 
 class MyApplication : Application() {
-    var catSpinner : MutableList<String> = mutableListOf()
     companion object {
         lateinit var database: AppDatabase
     }

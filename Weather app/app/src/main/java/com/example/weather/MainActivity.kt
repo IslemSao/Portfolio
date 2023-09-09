@@ -35,10 +35,11 @@ import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
-    private  val  LOCATION_PERMISSION_REQUEST_CODE = 123
-    private  var latitude : Double = 37.773972
-    private  var longitude : Double = -122.431297
+    private val LOCATION_PERMISSION_REQUEST_CODE = 123
+    private var latitude: Double = 37.773972
+    private var longitude: Double = -122.431297
     private var weatherList = mutableListOf<wetherInfo>()
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +48,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun work() {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         if (networkInfo == null || !networkInfo.isConnected) {
             // Handle no network connection scenario
             val tvTemp: TextView = findViewById(R.id.tvTemperature)
-            Snackbar.make( tvTemp, "No connection!" , Snackbar.LENGTH_LONG).setAction("retry") {
-               work()
+            Snackbar.make(tvTemp, "No connection!", Snackbar.LENGTH_LONG).setAction("retry") {
+                work()
             }.show()
         } else {
             setupRecycleView()
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         val tvCity = findViewById<EditText>(R.id.tvCity)
         val btn = findViewById<Button>(R.id.btnChanger)
         btn.setOnClickListener {
-           updateAdress()
+            updateAdress()
 
             // Clear the focus from the EditText
             tvCity.clearFocus()
@@ -74,18 +76,16 @@ class MainActivity : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(tvCity.windowToken, 0)
-            // Return true to indicate that we've handled the action
 
         }
         val btnLoc = findViewById<ImageButton>(R.id.imageButton)
         btnLoc.setOnClickListener {
-          checkLocation()
+            checkLocation()
             tvCity.clearFocus()
             // Hide the keyboard
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(tvCity.windowToken, 0)
-            // Return true to indicate that we've handled the action
         }
     }
 
@@ -103,12 +103,10 @@ class MainActivity : AppCompatActivity() {
                 // Use latitude and longitude as needed
             } else {
                 Snackbar.make(tvCity, "WRONG NAME!", Snackbar.LENGTH_LONG).show()
-                // Handle case where city name was not found
             }
         } catch (e: IOException) {
 
             e.printStackTrace()
-            // Handle exception
         }
     }
 
@@ -134,17 +132,17 @@ class MainActivity : AppCompatActivity() {
             // Permission already granted, proceed with location retrieval and API call
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
-                if (location != null) {
-                    latitude = location.latitude
-                    longitude = location.longitude
-                    // Proceed with the API call and UI updates
-                    UpdateEverything()
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        latitude = location.latitude
+                        longitude = location.longitude
+                        // Proceed with the API call and UI updates
+                        UpdateEverything()
+                    }
                 }
-            }
-            .addOnFailureListener { e ->
-                Log.e("LocationError", "Error getting location: ${e.message}")
-            }
+                .addOnFailureListener { e ->
+                    Log.e("LocationError", "Error getting location: ${e.message}")
+                }
         }
     }
 
@@ -169,18 +167,15 @@ class MainActivity : AppCompatActivity() {
                             // Proceed with the API call and UI updates
                         }
                     }
-                    .addOnFailureListener { e ->
-                        Log.e("LocationError", "Error getting location: ${e.message}")
-                    }
-            } else {
-                // Permission denied, handle accordingly
-                // ...
+                .addOnFailureListener { e ->
+                    Log.e("LocationError", "Error getting location: ${e.message}")
+                }
             }
         }
     }
+
     private fun UpdateEverything() {
 
-        val tvTemp = findViewById<TextView>(R.id.tvTemperature)
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org")
             .addConverterFactory(GsonConverterFactory.create())
@@ -197,27 +192,30 @@ class MainActivity : AppCompatActivity() {
         updateCity()
 
         call.enqueue(object : Callback<dataFromRequest> {
-            override fun onResponse(call: Call<dataFromRequest>, response: Response<dataFromRequest>) {
+            override fun onResponse(
+                call: Call<dataFromRequest>,
+                response: Response<dataFromRequest>
+            ) {
                 if (response.isSuccessful) {
                     val weatherData = response.body()
                     val firstInfo = weatherData?.list?.get(0)
                     if (firstInfo != null) {
                         updateUI(firstInfo)
-                        // Now you have the temperature value from the first info object
-                        // You can use this value to update your UI or perform any desired actions
-                       fetchData(response)
-                        }
-                    } else {
-                        Log.d("ERROR" , "response not succesfull")
-                        Toast.makeText(this@MainActivity, "an error has occurred!" , Toast.LENGTH_SHORT).show()
-                        }
+                        fetchData(response)
                     }
-                override fun onFailure(call: Call<dataFromRequest>, t: Throwable) {
-                    // Handle failure
-                    Log.e("API_CALL_ERROR", "Failed to fetch weather data", t)
+                } else {
+                    Log.d("ERROR", "response not succesfull")
+                    Toast.makeText(this@MainActivity, "an error has occurred!", Toast.LENGTH_SHORT)
+                        .show()
                 }
-            })
-        }
+            }
+
+            override fun onFailure(call: Call<dataFromRequest>, t: Throwable) {
+                // Handle failure
+                Log.e("API_CALL_ERROR", "Failed to fetch weather data", t)
+            }
+        })
+    }
 
     private fun fetchData(response: Response<dataFromRequest>) {
         val tvPressure = findViewById<TextView>(R.id.tvPressurePerc)
@@ -253,15 +251,19 @@ class MainActivity : AppCompatActivity() {
         val dayTextViews = listOf(tvDay1, tvDay2, tvDay3, tvDay4)
         // Iterate through the filtered and sorted data and update TextViews
         weatherData?.list?.forEachIndexed { index, entry ->
-            println(entry.dt_txt)
-            val item = wetherInfo(entry.dt_txt , entry.weather[0].description , entry.main.temp , entry.weather[0].icon  )
-            weatherList.add(index , item)
+            val item = wetherInfo(
+                entry.dt_txt,
+                entry.weather[0].description,
+                entry.main.temp,
+                entry.weather[0].icon
+            )
+            weatherList.add(index, item)
             val weatherRecyclerView = findViewById<RecyclerView>(R.id.rv)
 
             val weatherAdapter = weatherAdapter(weatherList)
             weatherRecyclerView.adapter = weatherAdapter
         }
-//
+
         sortedWeatherData?.values?.take(4)?.forEachIndexed { index, entry ->
             val minTemp = entry.minByOrNull { it.main.temp_min }?.main?.temp_min ?: 0.0
             val maxTemp = entry.maxByOrNull { it.main.temp_max }?.main?.temp_max ?: 0.0
@@ -277,7 +279,8 @@ class MainActivity : AppCompatActivity() {
 
             // Get the date from the data and parse it using the inputDateFormat
             val date = entry.first().dt_txt
-            val parsedDate =SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(date)
+            val parsedDate =
+                SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(date)
             // Get the day of the week using the dayOfWeekFormat
             val dayOfWeek = SimpleDateFormat("EEEE", Locale.getDefault()).format(parsedDate)
 
@@ -295,13 +298,16 @@ class MainActivity : AppCompatActivity() {
         val tvHumidity = findViewById<TextView>(R.id.tvHumidityPerc)
         val ivWeatherIcon = findViewById<ImageView>(R.id.imageView)
         val tvClouds = findViewById<TextView>(R.id.tvCloudPerc)
-        val tvWind= findViewById<TextView>(R.id.tvWindPerc)
+        val tvWind = findViewById<TextView>(R.id.tvWindPerc)
         val tvFeel = findViewById<TextView>(R.id.tvFeels)
         val tvPressure = findViewById<TextView>(R.id.tvPressurePerc)
         val temperature = firstInfo.main.temp
         val humidity = firstInfo.main.humidity
         val cloud = firstInfo.clouds.all
-        val wind = String.format("%.3f", firstInfo.wind.speed * 3.6) // Format windSpeed to 3 decimal places
+        val wind = String.format(
+            "%.3f",
+            firstInfo.wind.speed * 3.6
+        ) // Format windSpeed to 3 decimal places
         val pressure = firstInfo.main.pressure
         val weatherDescription = firstInfo.weather[0].description
         val feel = firstInfo.main.feels_like.toString()

@@ -1,4 +1,3 @@
-
 package com.example.TaskManager
 
 import android.annotation.SuppressLint
@@ -25,14 +24,16 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TasksAdapter (var taskList : List<Task> ,
-                    private val categoryDeleteListener: CategoryDeleteListener
-                    ) : RecyclerView.Adapter<TasksAdapter.todoViewHolder>() {
-    inner class todoViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
+class TasksAdapter(
+    var taskList: List<Task>,
+    private val categoryDeleteListener: CategoryDeleteListener
+) : RecyclerView.Adapter<TasksAdapter.todoViewHolder>() {
+    inner class todoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): todoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.task_category_item ,parent , false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.task_category_item, parent, false)
         return todoViewHolder(view)
     }
 
@@ -56,9 +57,9 @@ class TasksAdapter (var taskList : List<Task> ,
             val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
             val dueDate = LocalDate.parse(taskList[position].date, formatter)
             val task = taskList[position]
-            val backgroundColor = if(task.calculateImportance() == -1.0) {
+            val backgroundColor = if (task.calculateImportance() == -1.0) {
                 Color.parseColor("#930000") // Overdue tasks
-            }else {
+            } else {
                 if (dueDate == LocalDate.now()) {
                     Color.parseColor("#FfA500")
                 } else {
@@ -67,17 +68,21 @@ class TasksAdapter (var taskList : List<Task> ,
             }
             if (taskList[position].done == true) {
                 khalfia.setBackgroundColor(Color.GREEN)
-            }else {
+            } else {
                 khalfia.setBackgroundColor(backgroundColor)
             }
             btnDone.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     val updatedDoneStatus = !currentTask.done!!
 
-                    MyApplication.database.taskDao().updateTaskDoneStatus(currentTask.id, updatedDoneStatus)
-                    val filteredTasks = MyApplication.database.taskDao().getTasksForCategory(currentTask.categoryId)
+                    MyApplication.database.taskDao()
+                        .updateTaskDoneStatus(currentTask.id, updatedDoneStatus)
+                    val filteredTasks =
+                        MyApplication.database.taskDao().getTasksForCategory(currentTask.categoryId)
                     val filteredTasks2 = MyApplication.database.taskDao().getAllTasks()
-                    val uncompletedTasks = filteredTasks2.sortedByDescending { it.calculateImportance() }.filter { it.done == false }
+                    val uncompletedTasks =
+                        filteredTasks2.sortedByDescending { it.calculateImportance() }
+                            .filter { it.done == false }
                     var text = uncompletedTasks[0].toDo.toString()
                     withContext(Dispatchers.Main) {
                         updateTasks(filteredTasks.sortedByDescending { it.calculateImportance() })
@@ -92,9 +97,12 @@ class TasksAdapter (var taskList : List<Task> ,
             btnRemove.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     MyApplication.database.taskDao().deleteTask(currentTask)
-                    val filteredTasks = MyApplication.database.taskDao().getTasksForCategory(currentTask.categoryId)
+                    val filteredTasks =
+                        MyApplication.database.taskDao().getTasksForCategory(currentTask.categoryId)
                     val filteredTasks2 = MyApplication.database.taskDao().getAllTasks()
-                    val uncompletedTasks = filteredTasks2.sortedByDescending { it.calculateImportance() }.filter { it.done == false }
+                    val uncompletedTasks =
+                        filteredTasks2.sortedByDescending { it.calculateImportance() }
+                            .filter { it.done == false }
                     var text = uncompletedTasks[0].toDo.toString()
                     withContext(Dispatchers.Main) {
                         taskList = filteredTasks.sortedByDescending { it.calculateImportance() }

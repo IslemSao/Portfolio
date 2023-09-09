@@ -1,46 +1,19 @@
-package com.example.saotest
+package com.example.Calculator
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.saotest.databinding.ActivityMainBinding
-import com.google.android.material.snackbar.Snackbar
+import com.example.Calculator.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import net.objecthunter.exp4j.ExpressionBuilder
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.HttpException
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import kotlin.collections.MutableMap
-import kotlin.collections.MutableMap as MutableMapOf
-
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
@@ -59,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val btn0 = findViewById<Button>(R.id.btn_0)
         val btn1 = findViewById<Button>(R.id.btn_1)
         val btn2 = findViewById<Button>(R.id.btn_2)
-        val btn3= findViewById<Button>(R.id.btn_3)
+        val btn3 = findViewById<Button>(R.id.btn_3)
         val btn4 = findViewById<Button>(R.id.btn_4)
         val btn5 = findViewById<Button>(R.id.btn_5)
         val btn6 = findViewById<Button>(R.id.btn_6)
@@ -201,10 +174,10 @@ class MainActivity : AppCompatActivity() {
         btnequals.setOnClickListener {
             try {
                 val expression = ExpressionBuilder(equation).build()
-                if(!isDouble( expression.evaluate())) {
+                if (!isDouble(expression.evaluate())) {
                     expression.evaluate().toInt()
                     result = expression.evaluate().toInt().toString()
-                }else {
+                } else {
                     result = expression.evaluate().toString()
                 }
                 tvresult.text = result
@@ -228,7 +201,9 @@ class MainActivity : AppCompatActivity() {
         val historyJson = sharedPrefs.getString("history", null)
         if (historyJson != null) {
             val gson = Gson()
-            historyList.addAll(gson.fromJson(historyJson, Array<String>::class.java)?.toList() ?: emptyList())
+            historyList.addAll(
+                gson.fromJson(historyJson, Array<String>::class.java)?.toList() ?: emptyList()
+            )
         }
         btnHistory.setOnClickListener {
             historyList.reverse() // Reverse the historyList
@@ -250,20 +225,21 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
     }
+
     private fun appendToEquation(value: String) {
         val tvequation = findViewById<TextView>(R.id.tv_equation)
         equation += value
         tvequation.text = equation
     }
+
     private fun isDouble(number: Number): Boolean {
         return number.toDouble() != number.toInt().toDouble()
     }
 
 
     private fun reverseLastNumberSign(equation: String): String {
-        val operators = arrayOf('+', '-', '*', '/' , '%')
+        val operators = arrayOf('+', '-', '*', '/', '%')
         val reversedEquation = StringBuilder(equation.trim())
 
         var operatorIndex = -1

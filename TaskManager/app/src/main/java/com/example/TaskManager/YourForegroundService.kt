@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 
+
 class YourForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -18,7 +19,7 @@ class YourForegroundService : Service() {
     }
 
     private fun createNotification(text : String? , context: Context): Notification {
-        val notificationIntent = Intent(context, MainActivity::class.java) // Replace MainActivity with your app's main activity
+        val notificationIntent = Intent(context, MainActivity::class.java) 
         notificationIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = NotificationCompat.Builder(this, "IDhehe")
