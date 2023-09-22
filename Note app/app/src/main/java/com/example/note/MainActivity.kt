@@ -27,12 +27,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity() , NoteItemClickListener {
+class MainActivity : AppCompatActivity(), NoteItemClickListener {
     private lateinit var newTaskPopup: PopupWindow
     private lateinit var noteAdapter: NoteAdapter
     lateinit var noteDao: noteDao
-    lateinit var new : List<Note>
-
+    lateinit var new: List<Note>
 
     override fun onResume() {
         super.onResume()
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() , NoteItemClickListener {
                 withContext(Dispatchers.Main) {
                     noteAdapter.updateCategories(new)
                 }
-            }catch (e : Exception) {
+            } catch (e: Exception) {
                 println(e)
             }
         }
@@ -60,17 +59,18 @@ class MainActivity : AppCompatActivity() , NoteItemClickListener {
                 try {
                     noteDao = MyApplication.database.noteDao()
 
-                }catch (e:Exception) {
+                } catch (e: Exception) {
                     println(e)
                 }
             }
-            noteAdapter = NoteAdapter(noteDao.getAllCategories() , this@MainActivity  )
+            noteAdapter = NoteAdapter(noteDao.getAllCategories(), this@MainActivity)
             rv.adapter = noteAdapter
 
         }
         setupAddTaskButton()
 
     }
+
     private fun setupAddTaskButton() {
         var name: String
         var clr: Int = 0
@@ -151,18 +151,17 @@ class MainActivity : AppCompatActivity() , NoteItemClickListener {
             val etName = popupView.findViewById<EditText>(R.id.etNCname)
             name = etName.text.toString()
             val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-M-d"))
-            val newCategory = Note(name = name, color = clr , content = "" , date = date)
+            val newCategory = Note(name = name, color = clr, content = "", date = date)
             // Use Kotlin Coroutine to perform database operation asynchronously
             lifecycleScope.launch {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        if (noteDao.getAllCategories().any{it.name == name}) {
+                        if (noteDao.getAllCategories().any { it.name == name }) {
                             withContext(Dispatchers.Main) {
                                 etName.text.clear()
                                 etName.error = "This note already excite!"
                             }
-                        }
-                        else {
+                        } else {
                             noteDao.insert(newCategory)
                             val intent = Intent()
                             intent.putExtra("category_added", true)
@@ -188,7 +187,8 @@ class MainActivity : AppCompatActivity() , NoteItemClickListener {
             }
         }
     }
-    override fun onCategoryItemClicked(note: Note , color: Int) {
+
+    override fun onCategoryItemClicked(note: Note, color: Int) {
         val intent = Intent(this, noteActivity::class.java)
         intent.putExtra("NAME", note.name)
         intent.putExtra("BACKGROUND", note.color)

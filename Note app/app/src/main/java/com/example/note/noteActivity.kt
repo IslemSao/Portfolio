@@ -30,7 +30,7 @@ class noteActivity : AppCompatActivity()  {
         val date = intent.getStringExtra("DATE")
 
         val categoryNameTextView: TextView = findViewById(R.id.tvNoteName)
-        editText = findViewById<EditText>(R.id.editTextNoteContent)
+        editText = findViewById(R.id.editTextNoteContent)
         editText.setText(content)
 
         categoryNameTextView.text = name

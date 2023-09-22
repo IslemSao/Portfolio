@@ -15,6 +15,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.Button
@@ -113,6 +114,7 @@ class MainActivity : AppCompatActivity() {
             true
         )
         val addTaskBlock = popupView.findViewById<ConstraintLayout>(R.id.clNewTask)
+        val animationBlock = popupView.findViewById<ConstraintLayout>(R.id.importanceAnimation)
         // Set click listener for the "Add Category" button
         btnAddTask.setOnClickListener {
             lifecycle.apply {
@@ -123,16 +125,33 @@ class MainActivity : AppCompatActivity() {
                          }
                      } else {
                          withContext(Dispatchers.Main) {
+                             val slideAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slid_up)
 
                              val fadeInAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.fade_in)
                              // Apply the animation to the view
-                             addTaskBlock.startAnimation(fadeInAnimation)
+                             addTaskBlock.startAnimation(slideAnimation)
+                             slideAnimation.setAnimationListener(object : Animation.AnimationListener {
+                                 override fun onAnimationStart(animation: Animation) {
+                                     animationBlock.visibility = View.INVISIBLE
+                                 }
+
+                                 override fun onAnimationRepeat(animation: Animation) {}
+
+                                 override fun onAnimationEnd(animation: Animation) {
+                                     animationBlock.startAnimation(fadeInAnimation)
+                                     animationBlock.visibility = View.VISIBLE
+                                 }
+                             })    // Apply the animation to the view
+                             // Apply the animation to the view
+                             addTaskBlock.startAnimation(slideAnimation)
+
                              newTaskPopup.showAtLocation(it, Gravity.CENTER, 0, 0)
                          }
                      }
                 }
             }
         }
+        // Set click listener for the "Add Category" button
 
         // Find and set click listener for the "CONFIRM" button inside the popup
 
@@ -251,7 +270,6 @@ class MainActivity : AppCompatActivity() {
                     val filteredTasks = MyApplication.database.taskDao().getAllTasks()
                     val uncompletedTasks = filteredTasks.sortedByDescending { it.calculateImportance() }.filter { it.done == false }
                     text = uncompletedTasks[0].toDo.toString()
-                    println(text)
                     withContext(Dispatchers.Main) {
                         val serviceIntent = Intent(this@MainActivity, YourForegroundService::class.java)
                         serviceIntent.putExtra("notificationText", text)

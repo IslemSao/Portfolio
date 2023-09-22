@@ -30,8 +30,8 @@
         android:text="Convert currencies with ease!"
         android:textColor="@color/light_grey"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.10943913" />
+        app:layout_constraintGuide_percent="0.12722299" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"

@@ -17,7 +17,6 @@ import net.objecthunter.exp4j.ExpressionBuilder
 
 class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
-    private lateinit var binding: ActivityMainBinding
     private var equation = ""
     private var result = ""
     private var cibon = false
@@ -53,8 +52,8 @@ class MainActivity : AppCompatActivity() {
         val btnClearHistory = findViewById<Button>(R.id.btnClearHistory)
         val tvequation = findViewById<TextView>(R.id.tv_equation)
         val tvresult = findViewById<TextView>(R.id.tv_result)
-        val historyRecyclerView = findViewById<RecyclerView>(R.id.rv)
         val history = findViewById<ConstraintLayout>(R.id.rvContainer)
+        val historyRecyclerView = findViewById<RecyclerView>(R.id.rv)
 
 
 

@@ -11,6 +11,8 @@ import android.view.GestureDetector
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
@@ -67,8 +69,6 @@ class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemC
             categoriesAdapter = CategoriesAdapter(categories , this@categories , this@categories)
             rvCategories.adapter = categoriesAdapter
         }
-//        categoriesAdapter = CategoriesAdapter(categoryDao.getAllCategories())
-//        rvCategories.adapter =categoriesAdapter
         gestureDetector = GestureDetectorCompat(this, MyGestureListener()) // Initialize here
         setupAddTaskButton()
     }
@@ -121,15 +121,30 @@ class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemC
             true
         )
         addCategoryBlock = popupView.findViewById(R.id.clNewCategory)
+        val animationBlock = popupView.findViewById<ConstraintLayout>(R.id.catAnimation)
         // Set click listener for the "Add Category" button
         btnAddTask.setOnClickListener {
+            val slideAnimation = AnimationUtils.loadAnimation(this@categories, R.anim.slid_up)
+
             val fadeInAnimation = AnimationUtils.loadAnimation(this@categories, R.anim.fade_in)
             // Apply the animation to the view
-            addCategoryBlock.startAnimation(fadeInAnimation)
+            addCategoryBlock.startAnimation(slideAnimation)
+            slideAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    animationBlock.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {}
+
+                override fun onAnimationEnd(animation: Animation) {
+                    animationBlock.startAnimation(fadeInAnimation)
+                    animationBlock.visibility = View.VISIBLE
+                }
+            })    // Apply the animation to the view
             // Show the new task popup
             newTaskPopup.showAtLocation(it, Gravity.CENTER, 0, 0)
         }
-
+        // Set click listener for the "Add Category" button
         val btnColor = popupView.findViewById<Button>(R.id.btnNCcolor)
         btnColor.setOnClickListener {
 

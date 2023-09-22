@@ -131,18 +131,17 @@ class MainActivity : AppCompatActivity() {
         } else {
             // Permission already granted, proceed with location retrieval and API call
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location ->
-                    if (location != null) {
-                        latitude = location.latitude
-                        longitude = location.longitude
-                        // Proceed with the API call and UI updates
-                        UpdateEverything()
-                    }
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    latitude = location.latitude
+                    longitude = location.longitude
+                    // Proceed with the API call and UI updates
+                    UpdateEverything()
                 }
-                .addOnFailureListener { e ->
-                    Log.e("LocationError", "Error getting location: ${e.message}")
-                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("LocationError", "Error getting location: ${e.message}")
+            }
         }
     }
 

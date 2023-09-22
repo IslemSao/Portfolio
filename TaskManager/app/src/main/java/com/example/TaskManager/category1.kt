@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.Button
@@ -88,13 +89,27 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
             true
         )
-        val addTaskInCategoryBlock =
-            popupView.findViewById<ConstraintLayout>(R.id.clNewTaskInCategory)
+        val addTaskInCategoryBlock = popupView.findViewById<ConstraintLayout>(R.id.clNewTaskInCategory)
+        val animationBlock = popupView.findViewById<ConstraintLayout>(R.id.clAnimation)
         // Set click listener for the "Add Category" button
         btnAddTask.setOnClickListener {
+            val slideAnimation = AnimationUtils.loadAnimation(this@category1, R.anim.slid_up)
+
             val fadeInAnimation = AnimationUtils.loadAnimation(this@category1, R.anim.fade_in)
             // Apply the animation to the view
-            addTaskInCategoryBlock.startAnimation(fadeInAnimation)
+            addTaskInCategoryBlock.startAnimation(slideAnimation)
+            slideAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation) {
+                    animationBlock.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationRepeat(animation: Animation) {}
+
+                override fun onAnimationEnd(animation: Animation) {
+                    animationBlock.startAnimation(fadeInAnimation)
+                    animationBlock.visibility = View.VISIBLE
+                }
+            })    // Apply the animation to the view
             // Show the new task popup
             newTaskPopup.showAtLocation(it, Gravity.CENTER, 0, 0)
         }
