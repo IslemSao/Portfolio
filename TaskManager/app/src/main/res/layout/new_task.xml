@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="50dp"
-    android:background="@color/grey"
+    android:background="?attr/colorSecondaryContainer"
     android:id="@+id/clNewTask"
     android:padding="10dp">
 
@@ -21,7 +21,7 @@
             android:fontFamily="@font/sedgwickave"
             android:gravity="center"
             android:text="NEW TASK"
-            android:textColor="@color/white"
+            android:textColor="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,50 +29,44 @@
 
         <TextView
             android:id="@+id/tvNTname"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="category: "
-            android:textColor="@color/white"
+            android:padding="16dp"
+            android:text="Category: "
+            android:textColor="?attr/colorOnSecondaryContainer"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/spinnerNTcategory"
+            app:layout_constraintEnd_toStartOf="@+id/spinnerNTcategory"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNTtitle" />
 
         <TextView
             android:id="@+id/tvNTtask"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="task: "
-            android:textColor="@color/white"
+            android:text="Task: "
+            android:padding="16dp"
+            android:textColor="?attr/colorOnSecondaryContainer"
             android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/etNTname"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/etNTname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNTname" />
 
         <TextView
             android:id="@+id/tvNTdeadline"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="deadline date: "
-            android:textColor="@color/white"
+            android:padding="16dp"
+            android:textColor="?attr/colorOnSecondaryContainer"
             android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/etNTdeadline"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/tvNTimportance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="importance: "
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/spinnerNTimportance"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etNTdeadline" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNTtask" />
 
         <Spinner
             android:id="@+id/spinnerNTcategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/etNTname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/tvNTtitle" />
@@ -83,10 +77,10 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:text=""
-            android:textColor="@color/white"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvNTtask"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline8"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerNTcategory" />
+            app:layout_constraintStart_toStartOf="@+id/guideline8" />
 
         <EditText
             android:id="@+id/etNTdeadline"
@@ -95,15 +89,16 @@
             android:clickable="true"
             android:focusable="false"
             android:inputType="none"
-            android:textColor="@color/white"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvNTdeadline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline8"
-            app:layout_constraintTop_toBottomOf="@+id/etNTname" />
+            app:layout_constraintStart_toStartOf="@+id/guideline8" />
 
         <Spinner
             android:id="@+id/spinnerNTimportance"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnNTconfirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@+id/etNTdeadline" />
@@ -114,16 +109,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CONFIRM"
-            android:textColor="@color/white"
+            android:textColor="?attr/colorTertiary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinnerNTimportance" />
+            app:layout_constraintTop_toBottomOf="@+id/tvNTimportance" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.3525641" />
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/tvNTimportance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Importance: "
+            android:padding="16dp"
+            android:textColor="?attr/colorOnSecondaryContainer"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNTdeadline" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

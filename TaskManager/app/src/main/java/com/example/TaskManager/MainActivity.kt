@@ -82,16 +82,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         gestureDetector = GestureDetectorCompat(this, MyGestureListener()) // Initialize here
         var selectedImportance = 'A'
-        var newName : String
+        var newName: String
         val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
         var selectedDate = LocalDate.now().format(formatter)
         val btnAddTask: FloatingActionButton = findViewById(R.id.btnAddTask)
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView = inflater.inflate(R.layout.new_task, null)
         var category = 0
-        var categories:List<Category>
-        var text : String = "test"
-
+        var categories: List<Category>
+        var text: String = "test"
 
 
         // Create a notification channel (optional)
@@ -119,35 +118,42 @@ class MainActivity : AppCompatActivity() {
         btnAddTask.setOnClickListener {
             lifecycle.apply {
                 CoroutineScope(Dispatchers.IO).launch {
-                     if(        MyApplication.database.categoryDao().getAllCategories().isEmpty()) {
-                         withContext(Dispatchers.Main) {
-                             Toast.makeText(this@MainActivity , "You don't have a category, swipe to make one" , Toast.LENGTH_LONG).show()
-                         }
-                     } else {
-                         withContext(Dispatchers.Main) {
-                             val slideAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slid_up)
+                    if (MyApplication.database.categoryDao().getAllCategories().isEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "You don't have a category, swipe to make one",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            val slideAnimation =
+                                AnimationUtils.loadAnimation(this@MainActivity, R.anim.slid_up)
 
-                             val fadeInAnimation = AnimationUtils.loadAnimation(this@MainActivity, R.anim.fade_in)
-                             // Apply the animation to the view
-                             addTaskBlock.startAnimation(slideAnimation)
-                             slideAnimation.setAnimationListener(object : Animation.AnimationListener {
-                                 override fun onAnimationStart(animation: Animation) {
-                                     animationBlock.visibility = View.INVISIBLE
-                                 }
+                            val fadeInAnimation =
+                                AnimationUtils.loadAnimation(this@MainActivity, R.anim.fade_in)
+                            // Apply the animation to the view
+                            addTaskBlock.startAnimation(slideAnimation)
+                            slideAnimation.setAnimationListener(object :
+                                Animation.AnimationListener {
+                                override fun onAnimationStart(animation: Animation) {
+                                    animationBlock.visibility = View.INVISIBLE
+                                }
 
-                                 override fun onAnimationRepeat(animation: Animation) {}
+                                override fun onAnimationRepeat(animation: Animation) {}
 
-                                 override fun onAnimationEnd(animation: Animation) {
-                                     animationBlock.startAnimation(fadeInAnimation)
-                                     animationBlock.visibility = View.VISIBLE
-                                 }
-                             })    // Apply the animation to the view
-                             // Apply the animation to the view
-                             addTaskBlock.startAnimation(slideAnimation)
+                                override fun onAnimationEnd(animation: Animation) {
+                                    animationBlock.startAnimation(fadeInAnimation)
+                                    animationBlock.visibility = View.VISIBLE
+                                }
+                            })    // Apply the animation to the view
+                            // Apply the animation to the view
+                            addTaskBlock.startAnimation(slideAnimation)
 
-                             newTaskPopup.showAtLocation(it, Gravity.CENTER, 0, 0)
-                         }
-                     }
+                            newTaskPopup.showAtLocation(it, Gravity.CENTER, 0, 0)
+                        }
+                    }
                 }
             }
         }
@@ -157,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-M-d"))
-        val editTextDate: EditText =popupView.findViewById(R.id.etNTdeadline)
+        val editTextDate: EditText = popupView.findViewById(R.id.etNTdeadline)
         editTextDate.setText(date)
         val calendar = Calendar.getInstance()
 
@@ -167,7 +173,7 @@ class MainActivity : AppCompatActivity() {
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             val datePickerDialog = DatePickerDialog(this, { _, year, monthOfYear, dayOfMonth ->
-                 selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
+                selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"
                 editTextDate.setText(selectedDate)
             }, year, month, day)
 
@@ -175,7 +181,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val spinnerImportance: Spinner = popupView.findViewById(R.id.spinnerNTimportance)
-         spinnerCategory = popupView.findViewById(R.id.spinnerNTcategory)
+        spinnerCategory = popupView.findViewById(R.id.spinnerNTcategory)
 
         // Create an array of importance letters
         val importanceLetters = listOf('A', 'B', 'C', 'D')
@@ -185,15 +191,21 @@ class MainActivity : AppCompatActivity() {
                 categoryNamesList = categories.map { it.name }
                 withContext(Dispatchers.Main) {
 
-                    val spinnerAdapter1 = categorySpinnerAdapter(this@MainActivity,categoryNamesList)
+                    val spinnerAdapter1 =
+                        categorySpinnerAdapter(this@MainActivity, categoryNamesList)
                     spinnerCategory.adapter = spinnerAdapter1
                 }
             }
         }
-        val spinnerAdapter = ImportanceSpinnerAdapter(this@MainActivity,importanceLetters)
+        val spinnerAdapter = ImportanceSpinnerAdapter(this@MainActivity, importanceLetters)
         spinnerImportance.adapter = spinnerAdapter
         spinnerImportance.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 selectedImportance = importanceLetters[position]
             }
 
@@ -201,12 +213,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
         spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val catName = categoryNamesList[position]
 
                 lifecycle.apply {
                     CoroutineScope(Dispatchers.IO).launch {
-                        category = MyApplication.database.categoryDao().getCategoryIdByName(catName)!!
+                        category =
+                            MyApplication.database.categoryDao().getCategoryIdByName(catName)!!
                     }
                 }
             }
@@ -232,7 +250,8 @@ class MainActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         MyApplication.database.taskDao().insert(newTask)
-                        val filteredTasks = MyApplication.database.taskDao().getTasksForCategory(category)
+                        val filteredTasks =
+                            MyApplication.database.taskDao().getTasksForCategory(category)
                         withContext(Dispatchers.Main) {
                             loadTasksIntoRecyclerView()
                         }
@@ -247,11 +266,17 @@ class MainActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
                         val filteredTasks = MyApplication.database.taskDao().getAllTasks()
-                        val uncompletedTasks = filteredTasks.sortedByDescending { it.calculateImportance() }.filter { it.done == false }
+                        val uncompletedTasks =
+                            filteredTasks.sortedByDescending { it.calculateImportance() }
+                                .filter { it.done == false }
                         text = uncompletedTasks[0].toDo.toString()
+                        val category = MyApplication.database.categoryDao()
+                            .getCategoryNameById(uncompletedTasks[0].categoryId)
                         withContext(Dispatchers.Main) {
-                            val serviceIntent = Intent(this@MainActivity, YourForegroundService::class.java)
+                            val serviceIntent =
+                                Intent(this@MainActivity, YourForegroundService::class.java)
                             serviceIntent.putExtra("notificationText", text)
+                            serviceIntent.putExtra("notificationCategory", category?.capitalize())
                             ContextCompat.startForegroundService(this@MainActivity, serviceIntent)
                         }
                     } catch (e: Exception) {
@@ -268,11 +293,18 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val filteredTasks = MyApplication.database.taskDao().getAllTasks()
-                    val uncompletedTasks = filteredTasks.sortedByDescending { it.calculateImportance() }.filter { it.done == false }
+                    val uncompletedTasks =
+                        filteredTasks.sortedByDescending { it.calculateImportance() }
+                            .filter { it.done == false }
                     text = uncompletedTasks[0].toDo.toString()
+
+                    val category = MyApplication.database.categoryDao()
+                        .getCategoryNameById(uncompletedTasks[0].categoryId)
                     withContext(Dispatchers.Main) {
-                        val serviceIntent = Intent(this@MainActivity, YourForegroundService::class.java)
+                        val serviceIntent =
+                            Intent(this@MainActivity, YourForegroundService::class.java)
                         serviceIntent.putExtra("notificationText", text)
+                        serviceIntent.putExtra("notificationCategory", category?.uppercase())
                         ContextCompat.startForegroundService(this@MainActivity, serviceIntent)
                     }
                 } catch (e: Exception) {
@@ -303,16 +335,17 @@ class MainActivity : AppCompatActivity() {
 
             if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                 if (diffX > 0) {
+                } else {
+                    val intent = Intent(this@MainActivity, categories::class.java)
+                    startActivityForResult(intent, REQUEST_CODE_ADD_CATEGORY)
                 }
-                else {
-                    val intent = Intent(this@MainActivity,categories::class.java)
-                    startActivityForResult(intent, REQUEST_CODE_ADD_CATEGORY)                }
                 return true
             }
             return false
         }
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_ADD_CATEGORY && resultCode == Activity.RESULT_OK) {
@@ -324,15 +357,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-     fun updateCategorySpinner() {
+    fun updateCategorySpinner() {
 
         lifecycle.apply {
             CoroutineScope(Dispatchers.IO).launch {
                 val categories = MyApplication.database.categoryDao().getAllCategories()
-                 categoryNamesList = categories.map { it.name }
+                categoryNamesList = categories.map { it.name }
                 withContext(Dispatchers.Main) {
 
-                    val spinnerAdapter = categorySpinnerAdapter(this@MainActivity, categoryNamesList)
+                    val spinnerAdapter =
+                        categorySpinnerAdapter(this@MainActivity, categoryNamesList)
                     spinnerCategory.adapter = spinnerAdapter // Use the class-level spinnerCategory
                 }
             }

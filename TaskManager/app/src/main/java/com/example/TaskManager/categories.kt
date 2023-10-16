@@ -31,21 +31,38 @@ import yuku.ambilwarna.AmbilWarnaDialog
 import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
-class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemClickListener{
+class categories : AppCompatActivity(), CategoryDeleteListener, CategoryItemClickListener {
     private lateinit var newTaskPopup: PopupWindow
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var categoriesAdapter: CategoriesAdapter
     lateinit var categoryDao: CategoryDao
-    lateinit var addCategoryBlock :ConstraintLayout
+    lateinit var addCategoryBlock: ConstraintLayout
+    lateinit var taskDao: TaskDao
+
 
     //    val taskDao = MyApplication.database.taskDao()
     val REQUEST_CODE_TASK_VIEW = 2
     override fun onResume() {
         super.onResume()
+        lifecycleScope.launch {
+            CoroutineScope(Dispatchers.IO).launch {
+                val allCategories = categoryDao.getAllCategories()
+                val updatedCategories = allCategories.sortedByDescending { category ->
+                    val incompleteTaskCount = MyApplication.database.taskDao()
+                        .getTasksForCategory(category.id).count { it.done == false }
+                    // Sorting is done in descending order, so categories with more incomplete tasks come first
+                    incompleteTaskCount
+                }
+                withContext(Dispatchers.Main) {
+                    categoriesAdapter.updateCategories(updatedCategories)
+                }
+            }
+        }
 
         // Update your data or re-fetch from the database if needed
         categoriesAdapter.notifyDataSetChanged()
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_TASK_VIEW && resultCode == Activity.RESULT_OK) {
@@ -56,6 +73,7 @@ class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemC
             }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
@@ -63,11 +81,20 @@ class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemC
         rvCategories.layoutManager = LinearLayoutManager(this)
         categoryDao = MyApplication.database.categoryDao()
         GlobalScope.launch {
-            val categories = withContext(Dispatchers.IO) {
-                categoryDao.getAllCategories()
+            withContext(Dispatchers.IO) {
+                val allCategories = categoryDao.getAllCategories()
+
+// Sort the categories based on the number of incomplete tasks in each category
+                val sortedCategories = allCategories.sortedByDescending { category ->
+                    val incompleteTaskCount =
+                        MyApplication.database.taskDao().getTasksForCategory(category.id)
+                            .count { it.done == false }
+                    // Sorting is done in descending order, so categories with more incomplete tasks come first
+                    incompleteTaskCount
+                }
+                categoriesAdapter = CategoriesAdapter(sortedCategories, this@categories, this@categories , this@categories)
+                rvCategories.adapter = categoriesAdapter
             }
-            categoriesAdapter = CategoriesAdapter(categories , this@categories , this@categories)
-            rvCategories.adapter = categoriesAdapter
         }
         gestureDetector = GestureDetectorCompat(this, MyGestureListener()) // Initialize here
         setupAddTaskButton()
@@ -183,20 +210,25 @@ class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemC
             lifecycleScope.launch {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        if (categoryDao.getAllCategories().any{it.name == name}) {
+                        if (categoryDao.getAllCategories().any { it.name == name }) {
                             withContext(Dispatchers.Main) {
                                 etName.text.clear()
                                 etName.error = "This category already excite!"
                             }
-                        }
-                        else {
+                        } else {
                             categoryDao.insert(newCategory)
                             val intent = Intent()
                             intent.putExtra("category_added", true)
                             setResult(Activity.RESULT_OK, intent)
+                            val allCategories = categoryDao.getAllCategories()
 
-                            val updatedCategories =
-                                categoryDao.getAllCategories() // Fetch updated list from database
+// Sort the categories based on the number of incomplete tasks in each category
+                            val updatedCategories = allCategories.sortedByDescending { category ->
+                                val incompleteTaskCount = MyApplication.database.taskDao()
+                                    .getTasksForCategory(category.id).count { it.done == false }
+                                // Sorting is done in descending order, so categories with more incomplete tasks come first
+                                incompleteTaskCount
+                            }
 
                             // Update the UI on the main thread
                             withContext(Dispatchers.Main) {
@@ -223,7 +255,7 @@ class categories : AppCompatActivity()  , CategoryDeleteListener , CategoryItemC
         setResult(Activity.RESULT_OK, intent)
     }
 
-    override fun onCategoryItemClicked(category: Category , color: Int) {
+    override fun onCategoryItemClicked(category: Category, color: Int) {
         val intent = Intent(this, category1::class.java)
         intent.putExtra("NAME", category.name)
         intent.putExtra("BACKGROUND", category.color)

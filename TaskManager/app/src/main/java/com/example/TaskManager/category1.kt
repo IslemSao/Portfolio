@@ -44,6 +44,7 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category1)
+        setTheme(R.style.AppTheme) // Apply your theme here
 
         val rvTasks = findViewById<RecyclerView>(R.id.rvTask1)
         rvTasks.layoutManager = LinearLayoutManager(this)
@@ -65,7 +66,7 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
             var filteredTasks = taskDao.getTasksForCategory(category!!.id)
                 .sortedByDescending { it.calculateImportance() }
 
-            taskAdapter = TasksAdapter(filteredTasks, this@category1)
+            taskAdapter = TasksAdapter(filteredTasks, this@category1 , this@category1)
             rvTasks.adapter = taskAdapter
 
         }
@@ -193,11 +194,13 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
                             filteredTasks.sortedByDescending { it.calculateImportance() }
                                 .filter { it.done == false }
                         text = uncompletedTasks[0].toDo.toString()
-                        println(text)
+
+                        val category = MyApplication.database.categoryDao().getCategoryNameById(uncompletedTasks[0].categoryId)
                         withContext(Dispatchers.Main) {
                             val serviceIntent =
                                 Intent(this@category1, YourForegroundService::class.java)
                             serviceIntent.putExtra("notificationText", text)
+                            serviceIntent.putExtra("notificationCategory", category?.uppercase())
                             ContextCompat.startForegroundService(this@category1, serviceIntent)
                         }
                     } catch (e: Exception) {

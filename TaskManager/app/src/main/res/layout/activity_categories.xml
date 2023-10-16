@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="?android:attr/colorBackground"
     tools:context=".categories">
 
 
@@ -15,7 +15,7 @@
         android:fontFamily="@font/sedgwickave"
         android:gravity="center"
         android:text="Categories"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorPrimary"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -42,5 +42,7 @@
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:background="?attr/colorTertiary"
+        style="@style/CustomFloatingActionButton"
         app:srcCompat="@android:drawable/ic_input_add" />
 </androidx.constraintlayout.widget.ConstraintLayout>
