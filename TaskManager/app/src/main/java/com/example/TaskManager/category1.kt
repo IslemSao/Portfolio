@@ -38,6 +38,7 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
     private lateinit var taskAdapter: TasksAdapter
     lateinit var categoryDao: CategoryDao
     lateinit var taskDao: TaskDao
+    val today = LocalDate.now()
 
 
     @SuppressLint("MissingInflatedId")
@@ -63,10 +64,14 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
             taskDao = MyApplication.database.taskDao()
             val category =
                 categoryDao.getAllCategories().find { it.name == name && it.color == background }
-            var filteredTasks = taskDao.getTasksForCategory(category!!.id)
-                .sortedByDescending { it.calculateImportance() }
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+            var filteredTasks = taskDao.getTasksForCategory(category!!.id).filterNot {
+                (it.done == true && LocalDate.parse(it.date, dateFormatter)
+                    .isBefore(today) || LocalDate.parse(it.date, dateFormatter)
+                    .isBefore(today.minusDays(7)))
+            }.sortedByDescending { it.calculateImportance() }
 
-            taskAdapter = TasksAdapter(filteredTasks, this@category1 , this@category1)
+            taskAdapter = TasksAdapter(filteredTasks, this@category1, this@category1)
             rvTasks.adapter = taskAdapter
 
         }
@@ -90,7 +95,8 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
             true
         )
-        val addTaskInCategoryBlock = popupView.findViewById<ConstraintLayout>(R.id.clNewTaskInCategory)
+        val addTaskInCategoryBlock =
+            popupView.findViewById<ConstraintLayout>(R.id.clNewTaskInCategory)
         val animationBlock = popupView.findViewById<ConstraintLayout>(R.id.clAnimation)
         // Set click listener for the "Add Category" button
         btnAddTask.setOnClickListener {
@@ -175,9 +181,14 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
                         val intent = Intent()
                         intent.putExtra("cibon", true)
                         setResult(Activity.RESULT_OK, intent)
-                        val filteredTasks = taskDao.getTasksForCategory(id)
+                        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+                        val filteredTasks = taskDao.getTasksForCategory(id).filterNot {
+                            (it.done == true && LocalDate.parse(it.date , dateFormatter)
+                                .isBefore(today)) || LocalDate.parse(it.date , dateFormatter)
+                                .isBefore(today.minusDays(7))
+                        }.sortedByDescending { it.calculateImportance() }
                         withContext(Dispatchers.Main) {
-                            taskAdapter.updateTasks(filteredTasks.sortedByDescending { it.calculateImportance() })
+                            taskAdapter.updateTasks(filteredTasks)
                         }
                     } catch (e: Exception) {
                         println(e)
@@ -195,7 +206,8 @@ class category1 : AppCompatActivity(), CategoryDeleteListener {
                                 .filter { it.done == false }
                         text = uncompletedTasks[0].toDo.toString()
 
-                        val category = MyApplication.database.categoryDao().getCategoryNameById(uncompletedTasks[0].categoryId)
+                        val category = MyApplication.database.categoryDao()
+                            .getCategoryNameById(uncompletedTasks[0].categoryId)
                         withContext(Dispatchers.Main) {
                             val serviceIntent =
                                 Intent(this@category1, YourForegroundService::class.java)

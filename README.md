@@ -27,7 +27,7 @@ Task Manager
 
 https://github.com/IslemSao/portfolio/tree/main/TaskManager
 
-Description: An app to manage and organize tasks and to-do lists also using SQLlite and include animation.
+Description: An app to manage and organize tasks and to-do lists also using SQLlite and include animation and more features.
 
 Weather App
 

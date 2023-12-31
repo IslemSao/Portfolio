@@ -33,6 +33,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvCategories" />
 
+    <TextView
+        android:id="@+id/tvSwipeCat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/sedgwickave"
+        android:text="&lt;------ Swipe here!"
+        android:textColor="?attr/colorSecondary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvCategories" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAddCategory"
         android:layout_width="wrap_content"

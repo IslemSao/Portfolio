@@ -1,7 +1,6 @@
 package com.example.TaskManager
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.graphics.Color
@@ -11,24 +10,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.PorterDuff
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.animation.Animation
@@ -37,7 +29,6 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.PopupWindow
 import android.widget.Spinner
-import yuku.ambilwarna.AmbilWarnaDialog
 import java.util.Calendar
 
 class TasksAdapter(
@@ -66,7 +57,8 @@ class TasksAdapter(
             note.setText(taskList[position].toDo.toString())
             note.paint.isStrikeThruText = taskList[position].done!!
             val khalfia = findViewById<ConstraintLayout>(R.id.test)
-
+            val today = LocalDate.now()
+            val dateFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
             var currentTask = taskList[position]
 
             val formatter = DateTimeFormatter.ofPattern("yyyy-M-d")
@@ -133,7 +125,10 @@ class TasksAdapter(
                     MyApplication.database.taskDao()
                         .updateTaskDoneStatus(currentTask.id, updatedDoneStatus)
                     val filteredTasks =
-                        MyApplication.database.taskDao().getTasksForCategory(currentTask.categoryId)
+                        MyApplication.database.taskDao().getTasksForCategory(currentTask.categoryId).filterNot {
+                            (it.done == true && LocalDate.parse(it.date , dateFormatter)
+                                .isBefore(today)) || LocalDate.parse(it.date , dateFormatter).isBefore(today.minusDays(7))
+                        }.sortedByDescending { it.calculateImportance() }
                     val filteredTasks2 = MyApplication.database.taskDao().getAllTasks()
                     val uncompletedTasks =
                         filteredTasks2.sortedByDescending { it.calculateImportance() }
@@ -148,7 +143,7 @@ class TasksAdapter(
                         serviceIntent.putExtra("notificationText", text)
                         serviceIntent.putExtra("notificationCategory", category?.uppercase())
                         ContextCompat.startForegroundService(context, serviceIntent)
-                        updateTasks(filteredTasks.sortedByDescending { it.calculateImportance() })
+                        updateTasks(filteredTasks)
 
                     }
                 }
@@ -162,12 +157,16 @@ class TasksAdapter(
                     val uncompletedTasks =
                         filteredTasks2.sortedByDescending { it.calculateImportance() }
                             .filter { it.done == false }
+
                     var text = uncompletedTasks[0].toDo.toString()
 
                     val category = MyApplication.database.categoryDao()
                         .getCategoryNameById(uncompletedTasks[0].categoryId)
                     withContext(Dispatchers.Main) {
-                        taskList = filteredTasks.sortedByDescending { it.calculateImportance() }
+                        taskList = filteredTasks.filterNot {
+                            (it.done == true && LocalDate.parse(it.date , dateFormatter)
+                                .isBefore(today)) || LocalDate.parse(it.date , dateFormatter).isBefore(today.minusDays(7))
+                        }.sortedByDescending { it.calculateImportance() }
                         notifyDataSetChanged()
                         val serviceIntent = Intent(context, YourForegroundService::class.java)
                         serviceIntent.putExtra("notificationText", text)
@@ -236,7 +235,6 @@ class TasksAdapter(
                     val year = calendar.get(Calendar.YEAR)
                     val month = calendar.get(Calendar.MONTH)
                     val day = calendar.get(Calendar.DAY_OF_MONTH)
-
                     val datePickerDialog =
                         DatePickerDialog(context, { _, year, monthOfYear, dayOfMonth ->
                             selectedDate = "$year-${monthOfYear + 1}-$dayOfMonth"

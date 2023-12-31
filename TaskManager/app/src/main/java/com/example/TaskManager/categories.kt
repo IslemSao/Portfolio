@@ -40,8 +40,10 @@ class categories : AppCompatActivity(), CategoryDeleteListener, CategoryItemClic
     lateinit var taskDao: TaskDao
 
 
+
     //    val taskDao = MyApplication.database.taskDao()
     val REQUEST_CODE_TASK_VIEW = 2
+    val REQUEST_CODE_TASK_VIEW2 = 3
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
@@ -124,6 +126,8 @@ class categories : AppCompatActivity(), CategoryDeleteListener, CategoryItemClic
                     val intent = Intent(this@categories, MainActivity::class.java)
                     startActivityForResult(intent, REQUEST_CODE_TASK_VIEW)
                 } else {
+                    val intent = Intent(this@categories, archive::class.java)
+                    startActivityForResult(intent, REQUEST_CODE_TASK_VIEW2)
                 }
                 return true
             }

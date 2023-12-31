@@ -20,6 +20,10 @@ Notification: Have always a notification for your most important task to remind 
 
 Task Categories: Categorize tasks into different categories for better organization using names and also colors.
 
+Edit Feature: Edit your categories and tasks if needed, change the color or name and customize them to your taste.
+
+Achive Section: All the done tasks which the due date passed will be archived, also all the tasks that the due date passed more then 7 days ago.
+
 Installation
 
 To use the Task Manager app, follow these steps:

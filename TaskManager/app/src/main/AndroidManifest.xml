@@ -17,6 +17,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".archive"
+            android:exported="false" />
+        <activity
             android:name=".category1"
             android:exported="false" />
         <activity
@@ -36,6 +39,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <service
             android:name=".YourForegroundService"
             android:enabled="true"
