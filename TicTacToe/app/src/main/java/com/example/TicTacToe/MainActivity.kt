@@ -2,6 +2,7 @@ package com.example.TicTacToe
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +22,14 @@ class MainActivity : ComponentActivity() {
                 mainScreen(
                     onClick = {
                         if (!boxClick1.value && !boxClick2.value) {
+                            //Toast message to select a player
+                            Toast.makeText(
+                                this,
+                                "Please select a player",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@mainScreen
+
                         }
                         val X = boxClick1.value // Assuming X is a local variable
                         // Launch the game activity

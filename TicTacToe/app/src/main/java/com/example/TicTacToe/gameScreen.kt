@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 fun gameScreen(
     viewModel: TicTacToeViewModel,
 ) {
-    val reset = viewModel.reset
     val winnerState = viewModel.winnerState
     val tie = viewModel.tie
     val XCounter = viewModel.XCounter

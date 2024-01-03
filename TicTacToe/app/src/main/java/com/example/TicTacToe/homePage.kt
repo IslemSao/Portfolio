@@ -154,6 +154,7 @@ fun mainScreen(
 
             }
 
+            // i want to change the background of the button when being pressed
             //now a button with text
             Button(
                 modifier = Modifier

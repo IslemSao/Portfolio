@@ -18,13 +18,10 @@ class GameActivity : ComponentActivity() {
 
         setContent {
             TicTacToeTheme {
-                val player = remember {
-                    mutableStateOf(Player.X)
-                }
-                if (!x) {
-                    player.value = Player.O
-                }
 
+                if (x) {
+                    viewModel.currentPlayer = Player.X
+                }
                 gameScreen(viewModel)
             }
         }

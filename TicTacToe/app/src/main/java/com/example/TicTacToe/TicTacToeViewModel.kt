@@ -8,16 +8,16 @@ import androidx.compose.runtime.setValue
 
 class TicTacToeViewModel : ViewModel() {
 
-    // State variables
-    val player = mutableStateOf(Player.X)
     val reset = mutableStateOf(false)
     val newGame = mutableStateOf(false)
     val winnerState = mutableStateOf<WinningCombination?>(null)
     val tie = mutableStateOf(false)
-    var firstPlayer by mutableStateOf(player.value)
     val XCounter = mutableStateOf(0)
     val OCounter = mutableStateOf(0)
     var currentPlayer by mutableStateOf(Player.O)
+    // State variables
+    val player = mutableStateOf(currentPlayer)
+    var firstPlayer by mutableStateOf(player.value)
     var winningCombination by mutableStateOf<WinningCombination?>(null)
     val gameBoard = Array(3) { Array(3) { mutableStateOf(Player.EMPTY) } }
 
